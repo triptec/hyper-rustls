@@ -9,6 +9,7 @@ use tokio_rustls::TlsConnector;
 use webpki::{DNSName, DNSNameRef};
 
 use stream::MaybeHttpsStream;
+use std::time::Duration;
 
 /// A Connector for the `https` scheme.
 #[derive(Clone)]
@@ -28,6 +29,7 @@ impl HttpsConnector<HttpConnector> {
 
         let mut http = HttpConnector::new(threads);
         http.enforce_http(false);
+        http.set_keepalive(Some(Duration::new(60,0)));
         let mut config = ClientConfig::new();
         config
             .root_store
